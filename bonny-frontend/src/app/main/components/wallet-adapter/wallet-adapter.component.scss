@@ -1,0 +1,33 @@
+ion-item {
+    border: 1px solid;
+    border-radius: 64px;
+    padding: 8px;
+
+    img {
+        margin-right: 16px;
+    }
+}
+
+.wallet-wrapper {
+    width: 100%;
+    padding: 32px 16px;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.wallet-item {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    img {
+        height: 32px;
+        width: 32px;
+        margin-right: 16px;
+    }
+}

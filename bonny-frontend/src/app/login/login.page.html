@@ -1,0 +1,9 @@
+
+
+<ion-content [fullscreen]="true">
+    <ng-container [ngSwitch]="state">
+      <app-splash-screen *ngSwitchCase="'splash'"></app-splash-screen>
+      <app-login-screen *ngSwitchCase="'login'" ></app-login-screen>
+      <app-signup-screen *ngSwitchCase="'signup'"></app-signup-screen>
+  </ng-container>
+</ion-content>

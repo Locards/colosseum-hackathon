@@ -1,0 +1,28 @@
+<main>
+  <ion-icon class="back-button" (click)="dismiss()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+  <div class="image-container">
+    <img [src]="coupon.imageUrl">
+  </div>
+
+  <section class="description">
+
+    <h1>{{coupon.title}}
+      <span class="expiry-date">
+        <ion-icon name="time-outline"></ion-icon>
+        {{coupon.expiryDate | date: 'dd.MM.yyyy'}}
+      </span>
+    </h1>
+    <h3>{{coupon.details}}</h3>
+
+    <div>
+      {{coupon.description}}
+    </div>
+  </section>
+
+  <ion-button color="success" *ngIf="!coupon.status else activated" (click)="activateCoupon()">Activate</ion-button>
+  <ng-template #activated>
+    <ion-button color="primary" (click)="scanReceipt()">Upload receipt</ion-button>
+  </ng-template>
+
+</main>

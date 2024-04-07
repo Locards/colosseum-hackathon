@@ -1,0 +1,40 @@
+<main>
+  <ion-icon class="back-button" (click)="dismiss()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+  <section class="buttons">
+
+    <ion-button color="secondary" fill="outline" size="large">
+      <ion-icon slot="start" name="create-outline"></ion-icon>
+      <ion-label>Edit Profile</ion-label>
+    </ion-button>
+
+    <ion-button color="secondary" fill="outline" size="large">
+    <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+    <ion-label>Change Password</ion-label>
+    </ion-button>
+
+    <ion-button color="secondary" fill="outline" size="large">
+      <ion-icon slot="start" name="document-text-outline"></ion-icon>
+      <ion-label>Terms of Use</ion-label>
+    </ion-button>
+
+    <ion-button color="secondary" fill="outline" size="large">
+      <ion-icon slot="start" name="shield-checkmark-outline"></ion-icon>
+      <ion-label>Privacy Policy</ion-label>
+    </ion-button>
+
+    <ion-button color="secondary" fill="outline" size="large">
+      <ion-icon slot="start" name="people-outline"></ion-icon>
+      <ion-label>Refer a Friend</ion-label>
+    </ion-button>
+
+    <ion-button color="secondary" fill="outline" size="large">
+      <ion-icon slot="start" name="settings-outline"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-button>
+
+
+    <ion-button color="danger" fill="outline" (click)="logout()">Logout</ion-button>
+
+  </section>
+</main>

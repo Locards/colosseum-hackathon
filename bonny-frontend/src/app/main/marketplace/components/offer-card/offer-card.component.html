@@ -1,0 +1,10 @@
+<ion-card>
+  <ion-card-content>
+    <img [src]="offer.imageUrl">
+    <div class="content-wrapper">
+      <ion-card-title>{{offer.title}}</ion-card-title>
+      <ion-card-subtitle>{{offer.price}} B°</ion-card-subtitle>
+      <ion-button color="primary" (click)="showOffer()">Buy</ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>

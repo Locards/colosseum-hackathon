@@ -1,0 +1,16 @@
+<main>
+  <ion-icon class="back-button" (click)="dismiss()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+  <img [src]="offer.imageUrl">
+
+  <section class="description">
+
+    <h1>{{offer.title}}</h1>
+    <h3>{{offer.price}}  °B</h3>
+
+    <div>{{offer.details}}</div>
+  </section>
+
+  <ion-button color="primary">Buy</ion-button>
+
+</main>

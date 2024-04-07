@@ -1,0 +1,108 @@
+<ion-content [fullscreen]="true">
+
+  <main>
+
+    <section class="header">
+
+      <div class="text-container">
+        <span>Balance</span>
+        <div class="points">
+          <span>{{profile.tokens.toFixed(2)}}</span>
+          <img src="assets/logo.png">
+        </div>
+      </div>
+
+
+    </section>
+
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="earn">
+        <ion-label>Earn</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="spend">
+        <ion-label>Spend</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <section class="content" *ngIf="marketplace">
+
+      <ng-container [ngSwitch]="segment">
+
+
+        <section *ngSwitchCase="'earn'" class="earn">
+
+          <div class="earn-container">
+            <div class="header">
+              <h1>Quests</h1>
+              <ion-button (click)="showAllQuests()" fill="clear" color="dark">View All</ion-button>
+            </div>
+
+            <swiper>
+              <ng-template *ngFor="let quest of marketplace.quests" swiperSlide>
+                <app-quest-card [quest]="quest" (onSuccess)="showReclaimSuccess()"></app-quest-card>
+              </ng-template>
+            </swiper>
+          </div>
+
+          <div class="earn-container">
+            <div class="header">
+              <h1>Coupons</h1>
+              <ion-button (click)="showAllCoupons()" fill="clear" color="dark">View All</ion-button>
+            </div>
+
+            <swiper>
+              <ng-template *ngFor="let coupon of inactiveCoupons()" swiperSlide>
+                <app-coupon-card [coupon]="coupon" [canActivate]="false" (activate)="activateCoupon(coupon, $event)"  [active]="coupon.status == 'active'"></app-coupon-card>
+              </ng-template>
+            </swiper>
+          </div>
+          
+          <div class="earn-container">
+            <div class="header">
+              <h1>Shop Online</h1>
+              <ion-button (click)="showAllAffiliates()" fill="clear" color="dark">View All</ion-button>
+            </div>
+
+            <swiper>
+              <ng-template *ngFor="let affiliate of marketplace.affiliates" swiperSlide>
+                <app-affiliate-card [affiliate]="affiliate"></app-affiliate-card>
+              </ng-template>
+            </swiper>
+          </div>
+
+
+
+        </section>
+
+        <section *ngSwitchCase="'spend'"  class="spend">
+          <div class="searchbar-wrapper">
+            <ion-searchbar></ion-searchbar>
+          </div>
+         <app-offer-card *ngFor="let offer of offers" [offer]="offer"></app-offer-card>
+        </section>
+
+      </ng-container>
+
+
+    </section>
+
+  </main>
+
+  <ion-modal [isOpen]="successVisible" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
+    <ng-template>
+  
+  
+      <div class="success-wrapper">
+        <ng-lottie [options]="successOptions"></ng-lottie>
+        <span>You proved that you took <b>16</b> Rides on Uber</span>
+        <br>
+        <span>You earned <b>0.16</b> Bonny Tokens</span>
+        <ion-button class="success-button" (click)="hideReclaimSuccess()" >Acknowledge</ion-button>
+      </div>
+  
+  
+  
+    </ng-template>
+  </ion-modal> 
+
+</ion-content>

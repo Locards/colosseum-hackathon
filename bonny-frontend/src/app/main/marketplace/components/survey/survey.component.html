@@ -1,0 +1,41 @@
+<main>
+
+  <div class="counter">
+    <ion-icon name="close-outline" (click)="cancel()"></ion-icon>
+    <span>{{index+1}} / {{survey.questions.length}}</span>
+  </div>
+  <h1>{{survey.title}}</h1>
+
+  <section class="question-section">
+    <h3>{{survey.questions[index].title}}</h3>
+
+
+    <ng-container [ngSwitch]="survey.questions[index].type">
+
+      <div class="answer-container">
+
+        <ion-textarea [(ngModel)]="currentAnswer" *ngSwitchCase="'text'" fill="outline"></ion-textarea>
+        <ion-input [(ngModel)]="currentAnswer" *ngSwitchCase="'number'" type="number" fill="outline"></ion-input>
+
+        <ion-radio-group *ngSwitchCase="'option'" [(ngModel)]="currentAnswer">
+          <ion-item *ngFor="let option of survey.questions[index].options" lines="none">
+            <ion-radio [value]="option.id">{{option.title}}</ion-radio>
+          </ion-item>
+        </ion-radio-group >
+
+      </div>
+
+    </ng-container>
+  </section>
+
+  <div class="button-container">
+    <ion-button [disabled]="index == 0" color="primary" fill="clear" (click)="previous()">Previous</ion-button>
+    <ion-button color="primary" (click)="next()" *ngIf="index < survey.questions.length - 1 else submitButton" [disabled]="!currentAnswer">Next</ion-button>
+    <ng-template #submitButton>
+      <ion-button color="success" (click)="submitAnswers()" [disabled]="!currentAnswer">
+        <span *ngIf="!loading">Complete survey</span>
+        <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+      </ion-button>
+    </ng-template>
+  </div>
+</main>

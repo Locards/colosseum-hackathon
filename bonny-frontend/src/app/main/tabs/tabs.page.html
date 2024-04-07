@@ -1,0 +1,103 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home" href="/tabs/home">
+      <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="marketplace/earn" href="/tabs/marketplace/earn">
+      <ion-icon aria-hidden="true" name="pricetag-outline"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button>
+      <ion-icon aria-hidden="true"></ion-icon>
+    </ion-tab-button>
+    <ion-tab-button tab="wallet/overview" href="/tabs/wallet/history">
+        <ion-icon aria-hidden="true" name="wallet-outline"></ion-icon>
+        <ion-badge *ngIf="activeCoupons > 0">{{activeCoupons}}</ion-badge>
+    </ion-tab-button>
+    <ion-tab-button tab="analytics" href="/tabs/analytics">
+      <ion-icon aria-hidden="true" name="bar-chart-outline"></ion-icon>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+  <ion-fab>
+    <ion-fab-button (click)="showActions()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+
+  <ion-modal [isOpen]="actionsVisible" [initialBreakpoint]="1" [breakpoints]="[0, 1]" (willDismiss)="hideActions()">
+    <ng-template>
+      <div class="modal-body">
+
+        <ng-container *ngIf="!loading else loadingContainer">
+
+          <div class="close-wrapper" (click)="hideActions()">
+            <ion-icon name="close"></ion-icon>
+          </div>
+
+          <div class="header">
+            <h1>Add a receipt</h1>
+            <ion-note>Record receipts and invoices via a method of your choice</ion-note>
+          </div>
+
+          <div class="buttons-container">
+
+            <div class="action-buttons">
+
+              <div class="action-button" (click)="perfomAction('upload')">
+                <ion-icon name="cloud-upload-outline"></ion-icon>
+                <span>PDF & Gallery</span>
+              </div>
+    
+              <div class="action-button" (click)="perfomAction('earn')">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>Earn Tokens</span>
+              </div>
+
+            </div>
+
+            <div class="scan-wrapper">
+              <div class="scan-button" (click)="perfomAction('scan')">
+                <ion-icon slot="start" name="camera-outline"></ion-icon>
+                <div class="text-container">
+                  <span>Scan Receipt</span>
+                  <ion-note>With your camera</ion-note>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </ng-container>
+
+        <ng-template #loadingContainer>
+          <div #loadingContent class="loading">
+            
+            <div class="spinner-wrapper" *ngIf="!success else successAnimation">
+              <ion-spinner name="dots"></ion-spinner>
+              <span>Receipt is being uploaded</span>
+            </div>
+            
+            <ng-template #successAnimation>
+              <div class="success-wrapper">
+                <ng-lottie [options]="successOptions"></ng-lottie>
+                <span>Successfully uploaded</span>
+              </div>
+            </ng-template>
+          </div>
+
+          
+        </ng-template>
+
+
+        </div>
+
+
+    </ng-template>
+  </ion-modal>
+
+
+</ion-tabs>

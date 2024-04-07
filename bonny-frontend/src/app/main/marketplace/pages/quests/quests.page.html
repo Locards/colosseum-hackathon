@@ -1,0 +1,13 @@
+<ion-content [fullscreen]="true">
+  <main>
+   <section class="header">
+     <ion-icon class="back-button" (click)="navigateBack()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+     <span>Quests</span>
+   </section>
+ 
+   <section class="quests">
+     <app-quest-card *ngFor="let quest of quests" [quest]="quest"></app-quest-card>
+   </section>
+  </main>
+ </ion-content>
+ 

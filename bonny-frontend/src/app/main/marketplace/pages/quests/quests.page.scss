@@ -1,0 +1,30 @@
+main {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 10% 10% auto;
+    padding: 16px;
+}
+
+.header {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .back-button {
+        padding: 12px;
+        border-radius: 4%;
+        border: solid 1px lightgray;
+        cursor: pointer;
+        position: absolute;
+        left: 0;
+        transform: translateX(50%);
+    }
+
+    span {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+}

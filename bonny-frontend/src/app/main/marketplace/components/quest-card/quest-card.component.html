@@ -1,0 +1,19 @@
+<ion-card>
+  <ion-card-header>
+    <ion-icon name="newspaper-outline" *ngIf="quest.survey else questImage"></ion-icon>
+    <ng-template #questImage>
+      <img [src]="quest.imageUrl" height="64" width="64">
+    </ng-template>
+    <div>
+      <ion-card-title>{{quest.title}}</ion-card-title>
+      <ion-card-subtitle>{{quest.description}}</ion-card-subtitle>
+    </div>
+  </ion-card-header>
+  <ion-card-content>
+    <img *ngIf="image" [src]="image" class="qr">
+      <ion-button color="primary" (click)="startQuest()" [disabled]="loading">
+        <ion-spinner name="dots" *ngIf="loading"></ion-spinner>
+        <span *ngIf="!loading">Start</span>
+      </ion-button>
+  </ion-card-content>
+</ion-card>

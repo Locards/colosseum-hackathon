@@ -1,0 +1,38 @@
+.item-desc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.item-title {
+    font-size: 1.5rem;
+}
+
+.item-subtitle {
+    font-size: 1rem;
+    color: var(--ion-color-medium)
+}
+
+.item-details {
+
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    :nth-child(2) {
+        font-size: 1rem;
+        color: var(--ion-color-medium);
+    }
+
+}
+
+.confirmed {
+    color: var(--ion-color-success);
+}
+
+.pending {
+    color: var(--ion-color-warning);
+}

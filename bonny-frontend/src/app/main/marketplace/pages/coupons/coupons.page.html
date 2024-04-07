@@ -1,0 +1,28 @@
+<ion-content [fullscreen]="true">
+ <main *ngIf="profile">
+  <section class="header">
+    <ion-icon class="back-button" (click)="navigateBack()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+    <span>All Coupons</span>
+  </section>
+
+  <section class="filter">
+    <div class="filter-container">
+      <ion-chip (click)="selectFilter('all')" [color]="getFilterColor('all')">All</ion-chip>
+      <ion-chip (click)="selectFilter('active')" [color]="getFilterColor('active')">Activated</ion-chip>
+      <ion-chip (click)="selectFilter('notActive')" [color]="getFilterColor('notActive')">Available</ion-chip>
+    </div>
+  </section>
+
+  <section class="coupons">
+    <div class="coupons-wrapper">
+      <app-coupon-card
+      *ngFor="let coupon of getVisibleCoupons()"
+      [coupon]="coupon"
+      [canActivate]="true"
+      [active]="coupon.status == 'active'"
+      (activate)="activateCoupon(coupon, $event)"
+      ></app-coupon-card>
+    </div>
+  </section>
+ </main>
+</ion-content>

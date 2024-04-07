@@ -1,0 +1,34 @@
+ion-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+img {
+    border-radius: 50%;
+    border: 2px solid gray;
+    margin-right: 16px;
+    height: 64px;
+    width: 64px;
+}
+
+.qr {
+    border-radius: unset !important;
+    border: unset !important;
+    height: 128px !important;
+    width: 128px !important;
+    margin-right: 16px !important;
+}
+
+ion-icon {
+    margin-right: 16px;
+    height: 64px;
+    width: 64px;
+}
+
+ion-button {
+    width: 100%;
+    text-transform: none;
+    color: white !important;
+}

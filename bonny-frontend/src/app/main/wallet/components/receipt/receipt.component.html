@@ -1,0 +1,27 @@
+<main>
+  <ion-icon class="back-button" (click)="dismiss()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+  <img [src]="imageUrl" *ngIf="imageUrl else loading">
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  </ng-template>
+
+  <div class="metadata">
+    <div>
+      <h3>Supplier:</h3>
+      <span>{{receipt.supplierName}}</span>
+    </div>
+    <div>
+      <h3>Date:</h3>
+      <span>{{receipt.receiptDate | date: 'dd.MM.yyyy'}}</span>
+    </div>
+    <div>
+      <h3>Amount:</h3>
+      <span>{{receipt.totalAmount}} €</span>
+    </div>
+  </div>
+
+</main>

@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+// allow write: if firestore.get(
+//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Make sure to write security rules for your app before that time, or else
+    // all client requests to your Storage bucket will be denied until you Update
+    // your rules
+    match /{allPaths=**} {
+    	allow write: if request.resource.size < 3 * 1024 * 1024 // max 3MB
+                   && request.resource.contentType.matches('image/.*') // must be image
+                   && request.resource.metadata.userId == request.auth.uid // must set metadata correctly
+                   && request.auth.token != null; // must be authenticate
+      allow read: if request.auth.token != null // must be authenticated
+      						&& request.auth.uid == resource.metadata.userId; // must have the correct userId
+    }
+  }
+}

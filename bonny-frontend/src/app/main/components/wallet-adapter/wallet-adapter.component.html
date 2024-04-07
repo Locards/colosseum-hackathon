@@ -1,0 +1,19 @@
+<ion-item lines="none" (click)="showModal()">
+  <img *ngIf="selectedAdapter?.icon" [src]="selectedAdapter.icon" height="32" width="32">
+  <ion-icon *ngIf="!selectedAdapter" name="wallet-outline" slot="start"></ion-icon>
+  <ion-label>{{getLabel()}}</ion-label>
+  <ion-spinner name="dots" *ngIf="connecting"></ion-spinner>
+</ion-item>
+
+<ion-modal [isOpen]="isOpen" (didDismiss)="isOpen = false" [initialBreakpoint]="0.4" [breakpoints]="[0, 0.4]">
+  <ng-template>
+      <main class="wallet-wrapper">
+        <ng-container *ngFor="let adapter of adapters">
+          <div *ngIf="isInstalled(adapter)" class="wallet-item" (click)="connectWallet(adapter)">
+              <img [src]="adapter.icon">
+              <span>{{adapter.name}}</span>
+          </div>
+        </ng-container>
+      </main>
+  </ng-template>
+</ion-modal>

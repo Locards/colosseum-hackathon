@@ -1,0 +1,124 @@
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    animation: 0.2s fade-in ease-in-out forwards;
+
+    @keyframes fade-in {
+        0%{opacity: 0;}
+        100%{opacity: 1;}
+    }
+}
+
+.content {
+    height: 100%;
+}
+
+.overview {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    grid-template-rows: 70% 30%;
+
+    .overview-container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 64px;
+    }
+
+    .balance-container {
+        background-color: var(--ion-color-primary);
+        box-shadow: 4px 4px lightgray;
+        color:white;
+        height: 150px;
+        width: 80%;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 32px;
+
+        h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                margin-left: 16px;
+                height: 4rem;
+                width: 4rem;
+            }
+        }
+    }
+
+    ion-item {
+        width: 90%;
+        cursor: pointer;
+        --border-width: 1px;
+        --border-radius: 4px;
+        --inner-padding-top: 8px;
+        --inner-padding-bottom: 8px;
+        padding: 8px;
+    }
+
+    ion-button {
+        width: 90%;
+        text-transform: unset;
+    }
+
+}
+
+
+.history {
+    height: 100%;
+    padding: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    .filter-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 8px;
+
+        ion-chip {
+            flex-grow: 1;
+            width: 33%;
+            justify-content: center;
+        }
+
+    }
+
+    .header {
+        font-size: 1.4rem;
+        padding: 0 8px;
+    }
+
+    ion-list {
+        overflow-y: scroll;
+        padding-top: 0 !important;
+
+        ion-item-divider {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    }
+
+    ion-item-group {
+        margin: 8px;
+        box-shadow: 0px 0px 4px 2px lightgray;
+        border: 2px lightgray;
+    }
+
+}

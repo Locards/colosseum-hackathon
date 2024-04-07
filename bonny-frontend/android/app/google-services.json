@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81458868120",
+    "project_id": "locards-bonny-test",
+    "storage_bucket": "locards-bonny-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81458868120:android:dc73583c808a35d2a305ed",
+        "android_client_info": {
+          "package_name": "com.locards.bonnydev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81458868120-g36kbenttofuljg1oofdmk70oiiau8n9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMZ2zzY63prjxBvIglLJVCyuMvtAscPA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81458868120-g36kbenttofuljg1oofdmk70oiiau8n9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

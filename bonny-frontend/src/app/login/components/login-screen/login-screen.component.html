@@ -1,0 +1,41 @@
+<main>
+
+  <ion-icon class="back-button" (click)="showSplash()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+  <section class="header">
+    <h1>Welcome back! Glad to see you Again!</h1>
+  </section>
+
+  <section class="inputs">
+    <ion-input placeholder="Email" type="email" fill="outline" [(ngModel)]="email"></ion-input>
+    <ion-input placeholder="Password" type="password" fill="outline" [(ngModel)]="password"></ion-input>
+    <ion-button size="large" (click)="login()" [disabled]="loading">
+      <span *ngIf="!loading">Login</span>
+      <ion-spinner name="dots" *ngIf="loading" style="height: 20px"></ion-spinner>
+    </ion-button>
+  </section>
+
+
+  <!--<section class="other-logins">
+    <ion-button fill="outline" color="dark" size="large" (click)="loginGoogle()">
+      <ion-icon slot="start" name="logo-google"></ion-icon>
+      <ion-text slot="end">Continue with Google</ion-text>
+    </ion-button>
+    <ion-button fill="outline" color="dark" size="large">
+      <ion-icon slot="start" name="logo-apple"></ion-icon>
+      <ion-text slot="end">Continue with Apple</ion-text>
+    </ion-button>
+  </section>-->
+
+  <section class="sign-up">
+    Don't have an account?
+    <a (click)="showSignup()">Sign up now</a>
+  </section>
+
+  <div class="divider">OR</div>
+
+  <section class="wallet-connect">
+    <app-wallet-adapter></app-wallet-adapter>
+  </section>
+
+</main>

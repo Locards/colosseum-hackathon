@@ -1,0 +1,21 @@
+<ion-content [fullscreen]="true">
+  <main>
+   <section class="header">
+     <ion-icon class="back-button" (click)="navigateBack()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+     <span>Shop Online</span>
+   </section>
+ 
+   <section class="filter">
+     <div class="filter-container">
+       <ion-chip (click)="selectFilter('all')" [color]="getFilterColor('all')">All</ion-chip>
+       <ion-chip (click)="selectFilter('active')" [color]="getFilterColor('active')">Activated</ion-chip>
+       <ion-chip (click)="selectFilter('notActive')" [color]="getFilterColor('notActive')">Available</ion-chip>
+     </div>
+   </section>
+ 
+   <section class="affiliates">
+     <app-affiliate-card *ngFor="let affiliate of affiliates" [affiliate]="affiliate"></app-affiliate-card>
+   </section>
+  </main>
+ </ion-content>
+ 

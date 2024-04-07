@@ -1,0 +1,38 @@
+<main>
+
+  <ion-icon class="back-button" (click)="showSplash()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
+
+
+  <section class="header">
+    <h1>Hello! Sign up to get started</h1>
+  </section>
+
+  <section class="inputs">
+    <ion-input placeholder="Email" type="email" fill="outline" [(ngModel)]="email"></ion-input>
+    <ion-input placeholder="Password" type="password" fill="outline" [(ngModel)]="password"></ion-input>
+    <ion-input placeholder="Confirm Password" type="password" fill="outline" [(ngModel)]="confirmPassword"></ion-input>
+    <ion-button size="large" (click)="signUp()" [disabled]="loading">
+      <span *ngIf="!loading">Sign Up</span>
+      <ion-spinner name="dots" *ngIf="loading" style="height: 20px"></ion-spinner>
+    </ion-button>
+  </section>
+
+
+  <!--<section class="other-logins">
+    <ion-button fill="outline" color="dark" size="large">
+      <ion-icon slot="start" name="logo-google"></ion-icon>
+      <ion-text slot="end">Continue with Google</ion-text>
+    </ion-button>
+    <ion-button fill="outline" color="dark" size="large">
+      <ion-icon slot="start" name="logo-apple"></ion-icon>
+      <ion-text slot="end">Continue with Apple</ion-text>
+    </ion-button>
+  </section>-->
+
+  <section class="sign-up">
+    Already have an account?
+    <a (click)="showLogin()">Login Now</a>
+  </section>
+
+
+</main>
