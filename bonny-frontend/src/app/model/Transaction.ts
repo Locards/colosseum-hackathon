@@ -4,7 +4,9 @@ export interface Transaction {
     type: string,
     status: TransactionStatus,
     tokens: number,
-    receipt: Receipt
+    receipt: Receipt,
+    questStatus: any,
+    timestamp: string
 }
 
 export type TransactionStatus = "confirmed" | "pending" | "evaluating"

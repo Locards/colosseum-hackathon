@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { provideAuth, getAuth } from '@angular/fire/auth'
+import { provideAuth, getAuth, initializeAuth, indexedDBLocalPersistence } from '@angular/fire/auth'
 import { provideStorage, getStorage } from '@angular/fire/storage'
 import { provideLottieOptions } from 'ngx-lottie'
 import player from 'lottie-web'
@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SwiperModule } from 'swiper/angular';
+import { Capacitor } from '@capacitor/core';
 
 
 @NgModule({
@@ -26,8 +27,16 @@ import { SwiperModule } from 'swiper/angular';
     AppRoutingModule,
     HttpClientModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => {
+      if (Capacitor.isNativePlatform()) { //ios workaround, see https://stackoverflow.com/questions/70429044/ionic-await-signinwithemailandpassword-not-working-on-ios-simulator-device-w
+        return initializeAuth(getApp(), {
+          persistence: indexedDBLocalPersistence,
+        });
+      } else {
+        return getAuth();
+      }
+    }),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
     NgApexchartsModule,
     SwiperModule

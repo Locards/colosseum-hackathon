@@ -2,6 +2,8 @@ ion-item {
     border: 1px solid;
     border-radius: 64px;
     padding: 8px;
+    background-color: whitesmoke;
+    --background: whitesmoke !important;
 
     img {
         margin-right: 16px;

@@ -1,5 +1,6 @@
-<ion-card #card>
-  <ion-card-header (click)="showCoupon()">
+<ion-card #card mode="md">
+  <!--<ion-card-header (click)="showCoupon()">-->
+  <ion-card-header>
     <img [src]="coupon.imageUrl" height="64" width="64">
     <div>
       <ion-card-title>{{coupon.title}}</ion-card-title>
@@ -10,10 +11,23 @@
     <hr>
   </div>
   <ion-card-content>
-    <ion-button *ngIf="active else notActive" (click)="scanReceipt()">Upload receipt</ion-button>
+
+    <ion-button *ngIf="coupon.loading else notLoading" [disabled]="true">
+      <ion-spinner name="dots"></ion-spinner>
+    </ion-button>
+
+    <ng-template #notLoading>
+      <ion-button *ngIf="active else notActive" (click)="canActivate ? scanReceipt() : showAllCoupons()">Upload receipt</ion-button>
+    </ng-template>
+
     <ng-template #notActive>
+      <ion-button *ngIf="isRedeemed() else notRedeemed" color="success" [disabled]="true">Redeemed</ion-button>
+    </ng-template>
+
+    <ng-template #notRedeemed>
       <ion-button color="success" (click)="canActivate ? activateCoupon() : showAllCoupons()">Activate</ion-button>
     </ng-template>
+    
     <span class="expiry-date">
       <ion-icon name="time-outline"></ion-icon>
       {{coupon.expiryDate | date: 'dd.MM.yyyy'}}

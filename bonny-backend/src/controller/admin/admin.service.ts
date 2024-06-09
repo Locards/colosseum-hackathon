@@ -11,7 +11,7 @@ export class AdminService {
 
     async loadDashboardTransactions() {
         const transactions = this.transactionService.getAll();        
-        const dashboardTrxItems = (await transactions).map(trx => new DashboardTransactionItem(trx));
+        const dashboardTrxItems = (await transactions).filter(tx => tx.receipt).map(trx => new DashboardTransactionItem(trx));
         return new DashboardTransactions(dashboardTrxItems);
     }
 }

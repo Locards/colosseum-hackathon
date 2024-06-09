@@ -3,6 +3,7 @@ import { Question, Survey, SurveyAnswer, SurveyOptionAnswer } from 'src/app/mode
 import * as _ from 'lodash'
 import { ModalController } from '@ionic/angular';
 import { MarketplaceService } from '../../marketplace.service';
+import { HomeService } from 'src/app/main/home/home.service';
 
 @Component({
   selector: 'app-survey',
@@ -28,7 +29,8 @@ export class SurveyComponent  implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private marketplaceService: MarketplaceService  
+    private marketplaceService: MarketplaceService  ,
+    private homeService: HomeService
   ) { 
   }
 
@@ -42,7 +44,8 @@ export class SurveyComponent  implements OnInit {
   next() {
     this.answers[this.index] = {
       questionId: this.survey.questions[this.index].id,
-      optionId: this.currentAnswer
+      optionId: this.survey.questions[this.index].type == "option" ? this.currentAnswer : null,
+      freeText: this.survey.questions[this.index].type == "text" ? this.currentAnswer : null
     };
     this.currentAnswer = undefined;
     this.index++;
@@ -50,11 +53,15 @@ export class SurveyComponent  implements OnInit {
 
   previous() {
     this.index--;
-    this.currentAnswer = this.answers[this.index].optionId;
+    this.currentAnswer = this.survey.questions[this.index].type == "text" ? this.answers[this.index].freeText : this.answers[this.index].optionId
   }
 
   submitAnswers() {
-    this.answers[this.index] = this.currentAnswer;
+    this.answers[this.index] = {
+      questionId: this.survey.questions[this.index].id,
+      optionId: this.survey.questions[this.index].type == "option" ? this.currentAnswer : null,
+      freeText: this.survey.questions[this.index].type == "text" ? this.currentAnswer : null
+    };
     console.log(this.answers)
 
     const answer: SurveyAnswer = {
@@ -65,8 +72,9 @@ export class SurveyComponent  implements OnInit {
 
     this.loading = true;
 
-    this.marketplaceService.submitSurvey(answer).subscribe(() => {
-      this.modalCtrl.dismiss()
+    this.marketplaceService.submitSurvey(answer).subscribe((res: any) => {
+      this.modalCtrl.dismiss({status: "success", earnedPoints: res.gainedPoints})
+      this.homeService.pollTransactions()
     })
   }
 

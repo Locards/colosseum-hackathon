@@ -179,4 +179,4 @@ export class LoginService {
 }
 
 
-export type LoginState = "splash" | "login" | "signup"
+export type LoginState = "login" | "signup"

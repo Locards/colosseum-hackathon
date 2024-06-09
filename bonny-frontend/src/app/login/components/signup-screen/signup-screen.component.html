@@ -1,8 +1,5 @@
 <main>
 
-  <ion-icon class="back-button" (click)="showSplash()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
-
-
   <section class="header">
     <h1>Hello! Sign up to get started</h1>
   </section>
@@ -11,6 +8,8 @@
     <ion-input placeholder="Email" type="email" fill="outline" [(ngModel)]="email"></ion-input>
     <ion-input placeholder="Password" type="password" fill="outline" [(ngModel)]="password"></ion-input>
     <ion-input placeholder="Confirm Password" type="password" fill="outline" [(ngModel)]="confirmPassword"></ion-input>
+    <a href="https://bonny.so/toc" target="_blank" style="font-size: 12px;">By registering, you accept our Terms and Conditions and Privacy Policy.</a>
+
     <ion-button size="large" (click)="signUp()" [disabled]="loading">
       <span *ngIf="!loading">Sign Up</span>
       <ion-spinner name="dots" *ngIf="loading" style="height: 20px"></ion-spinner>

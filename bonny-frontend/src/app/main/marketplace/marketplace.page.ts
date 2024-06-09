@@ -10,6 +10,8 @@ import { Coupon, CouponStatus, TCoupon } from 'src/app/model/Coupon';
 import { Observable, Subscription } from 'rxjs';
 import { AnimationOptions } from 'ngx-lottie';
 import { Offer } from 'src/app/model/Offer';
+import { SuccessStatus } from './components/quest-card/quest-card.component';
+import { Quest } from 'src/app/model/Quest';
 
 SwiperCore.use([Navigation])
 
@@ -33,25 +35,16 @@ export class MarketplacePage implements OnDestroy {
   offers: Offer[] = [
     {
       title: "Bonny NFT",
-      imageUrl: "assets/nft.jpeg",
-      price: 500,
-      details: "The holder of the NFT receives 2 perks per month"
-    },
-    {
-      title: "Lidl Coupon",
-      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Eo_circle_blue_white_letter-l.svg/1200px-Eo_circle_blue_white_letter-l.svg.png",
-      price: 20,
-      details: "Get 30% discount on your next purchase"
-    },
-    {
-      title: "Soccer Ticket",
-      imageUrl: "https://media.istockphoto.com/id/926151306/de/vektor/fu%C3%9Fball-vektor-icon.jpg?s=612x612&w=0&k=20&c=IIJ851I7XBXSbriAkGktGtc2CuiQF7SLqWX0YWrP9AQ=",
-      price: 800,
-      details: "Get 2 VIP Soccer tickets for Hertha BSC Berlin"
+      imageUrl: "assets/suit.png",
+      price: 1,
+      details: "The holder of the NFT receives 2 perks per month",
+      externalUrl: "https://mint.bonny.so"
     }
   ]
 
-  successVisible: boolean = false
+  reclaimSuccessVisible: boolean = false
+  questSuccessVisible: boolean = false
+  currentSuccessStatus: SuccessStatus
 
   constructor(
     private marketplaceService: MarketplaceService,
@@ -77,6 +70,10 @@ export class MarketplacePage implements OnDestroy {
     })
   }
 
+  forceLoadMarketplace(event: any) {
+    this.marketplaceService.loadMarketplace(event)
+  } 
+
 
   listenToMarketplace() {
     this.marketplaceSubscription = this.marketplaceService.getMarketplace$().subscribe((marketplace: TMarketplace) => {
@@ -95,13 +92,23 @@ export class MarketplacePage implements OnDestroy {
     })
   }
 
-
   inactiveCoupons() {
-    return this.marketplace.coupons//.filter((coupon: TCoupon) => !coupon.status)
+    return this.marketplace.coupons.filter((coupon: TCoupon) => { 
+      if(!coupon.status) return true
+      return coupon.status == "active"
+    })
+  }
+
+  normalQuests() {
+    return this.marketplace.quests.filter((quest: Quest) => quest.type != "bonk")
+  }
+
+  bonkQuests() {
+    return this.marketplace.quests.filter((quest: Quest) => quest.type == "bonk")
   }
 
   getProfile() {
-    this.homeService.getProfile().subscribe((profile: Profile) => this.profile = profile)
+    this.homeService.getProfile$().subscribe((profile: Profile) => this.profile = profile)
   }
 
   showAllCoupons() {
@@ -112,6 +119,10 @@ export class MarketplacePage implements OnDestroy {
     this.nav.navigateForward("tabs/marketplace/earn/quests")
   }
 
+  showBonkQuests() {
+    this.nav.navigateForward("tabs/marketplace/earn/quests", {queryParams: {filter: "bonk"}})
+  }
+
   showAllAffiliates() {
     this.nav.navigateForward("tabs/marketplace/earn/affiliates")
   }
@@ -120,12 +131,27 @@ export class MarketplacePage implements OnDestroy {
       this.marketplaceSubscription.unsubscribe()
   }
 
+  showSuccess(status: SuccessStatus) {
+    this.currentSuccessStatus = status;
+    console.log(this.currentSuccessStatus)
+    if(status.type == "quest") this.showQuestSuccess()
+    if(status.type == "reclaim") this.showReclaimSuccess()
+  }
+
   showReclaimSuccess() {
-    this.successVisible = true
+    this.reclaimSuccessVisible = true
   }
 
   hideReclaimSuccess() {
-    this.successVisible = false
+    this.reclaimSuccessVisible = false
+  }
+
+  showQuestSuccess() {
+    this.questSuccessVisible = true
+  }
+
+  hideQuestSuccess() {
+    this.questSuccessVisible = false
   }
 
 }

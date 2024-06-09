@@ -1,0 +1,27 @@
+<ion-item (click)="showReceipt()" *ngIf="transaction.status != 'evaluating' else evaluating">
+  <ion-icon name="receipt-outline" slot="start"></ion-icon>
+  <ion-label class="item-desc">
+    <span class="item-title">{{transaction.receipt.supplierName}}</span>
+    <span class="item-subtitle">Coupon</span>
+  </ion-label>
+
+  <div class="item-details" [ngClass]="transaction.status == 'confirmed' ? 'confirmed' : 'pending'" slot="end">
+    <span>{{transaction.tokens.toFixed(2)}} B°</span>
+  </div>
+</ion-item>
+
+<ng-template #evaluating>
+
+  <ion-item>
+    <ion-icon name="receipt-outline" slot="start"></ion-icon>
+    <ion-label class="item-desc">
+      <ion-skeleton-text class="item-title"></ion-skeleton-text>
+      <ion-skeleton-text class="item-subtitle" style="width: 60%;"></ion-skeleton-text>
+    </ion-label>
+  
+    <div class="item-details" [ngClass]="transaction.status == 'confirmed' ? 'confirmed' : 'pending'" slot="end">
+      <ion-spinner name="dots"></ion-spinner>
+    </div>
+  </ion-item>
+
+</ng-template>

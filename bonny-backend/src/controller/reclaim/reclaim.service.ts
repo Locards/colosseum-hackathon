@@ -5,6 +5,7 @@ import * as QR from 'qrcode'
 import { ReclaimStatus } from 'src/model/reclaim/reclaim.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs'
+import { json } from 'stream/consumers';
 
 @Injectable()
 export class ReclaimService {
@@ -52,11 +53,14 @@ export class ReclaimService {
         const interval = setInterval(async () => {
             const res = await axios.get(url)
             if(res.data) {
-                console.log(res.data)
+
 
                 if(res.data.session.status == 'MOBILE_SUBMITTED'){
                     clearInterval(interval)
-                    this.statuses.set(uid, {status: "successful"})
+                    console.log("proofs:", res.data.session.proofs)
+                    const context = JSON.parse(res.data.session.proofs[0].claimData.context)
+                    const rideCount = context.extractedParameters.ride_count
+                    this.statuses.set(uid, {status: "successful", extractedData: rideCount})
                 } 
             }
         }, 2000)
@@ -74,6 +78,7 @@ export class ReclaimService {
                 profile: this.profileSerivce.get()
             }
         )*/
+        //this.statuses.set(uid, {status: "successful"})
     }
 
     failureCallback(error: Error) {

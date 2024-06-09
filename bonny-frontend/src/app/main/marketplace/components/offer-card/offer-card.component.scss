@@ -7,10 +7,12 @@ ion-card-content {
 }
 
 img {
-    width: 100%;
-    height: 100%;
+    width: auto;
     margin-right: 16px;
-    border-radius: 5%;
+    border-radius: 50%;
+    height: 80%;
+    border: 2px solid black;
+    max-height: 180px;
 }
 
 

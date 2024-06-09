@@ -30,9 +30,5 @@ export class LoginScreenComponent  implements OnInit {
     this.loginService.changeState("signup")
   }
   
-  showSplash() {
-    this.loginService.changeState("splash")
-  }
-
 
 }

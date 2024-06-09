@@ -1,0 +1,11 @@
+<ion-item (click)="showQuest()">
+  <ion-icon name="ribbon-outline" slot="start"></ion-icon>
+  <ion-label class="item-desc">
+    <span class="item-title">{{transaction.questStatus.quest.title}}</span>
+    <span class="item-subtitle">Quest</span>
+  </ion-label>
+
+  <div class="item-details" [ngClass]="transaction.status == 'confirmed' ? 'confirmed' : 'pending'" slot="end">
+    <span>{{transaction.tokens.toFixed(2)}} B°</span>
+  </div>
+</ion-item>

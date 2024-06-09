@@ -1,21 +1,12 @@
 <ion-content [fullscreen]="true">
 
-  <main>
+  <ion-refresher slot="fixed" (ionRefresh)="forceLoadMarketplace($event)">
+    <ion-refresher-content refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
 
-    <section class="header">
+  <main *ngIf="marketplace">
 
-      <div class="text-container">
-        <span>Balance</span>
-        <div class="points">
-          <span>{{profile.tokens.toFixed(2)}}</span>
-          <img src="assets/logo.png">
-        </div>
-      </div>
-
-
-    </section>
-
-    <ion-segment [(ngModel)]="segment">
+    <ion-segment [(ngModel)]="segment" mode="md">
       <ion-segment-button value="earn">
         <ion-label>Earn</ion-label>
       </ion-segment-button>
@@ -33,31 +24,74 @@
 
           <div class="earn-container">
             <div class="header">
-              <h1>Quests</h1>
-              <ion-button (click)="showAllQuests()" fill="clear" color="dark">View All</ion-button>
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <ion-icon name="ribbon-outline" height="28px" style="margin-right: 8px;"></ion-icon>
+                <h1>Quests</h1>
+              </div>
+              <ion-icon (click)="showAllQuests()" slot="icon-only" name="arrow-forward-circle-outline"></ion-icon>
             </div>
 
-            <swiper>
-              <ng-template *ngFor="let quest of marketplace.quests" swiperSlide>
-                <app-quest-card [quest]="quest" (onSuccess)="showReclaimSuccess()"></app-quest-card>
+            <swiper *ngIf="normalQuests().length > 0 else noQuests">
+              <ng-template *ngFor="let quest of normalQuests()" swiperSlide>
+                <app-quest-card [quest]="quest" (onSuccess)="showSuccess($event)"></app-quest-card>
               </ng-template>
             </swiper>
+            <ng-template #noQuests>
+              <ion-card class="no-quests">
+                <span>Good job! You have completed all Quests!</span>
+                <img src="assets/suit.png">
+              </ion-card>
+            </ng-template>
           </div>
 
           <div class="earn-container">
             <div class="header">
-              <h1>Coupons</h1>
-              <ion-button (click)="showAllCoupons()" fill="clear" color="dark">View All</ion-button>
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <ion-icon name="bag-outline" height="28px" style="margin-right: 8px;"></ion-icon>
+                <h1>Coupons</h1>
+              </div>
+              <ion-icon (click)="showAllCoupons()" slot="icon-only" name="arrow-forward-circle-outline"></ion-icon>
             </div>
 
-            <swiper>
+            <swiper *ngIf="marketplace.coupons.length > 0 else noCoupons">
               <ng-template *ngFor="let coupon of inactiveCoupons()" swiperSlide>
                 <app-coupon-card [coupon]="coupon" [canActivate]="false" (activate)="activateCoupon(coupon, $event)"  [active]="coupon.status == 'active'"></app-coupon-card>
               </ng-template>
             </swiper>
+
+            <ng-template #noCoupons>
+              <ion-card class="no-quests">
+                <span>No Coupons available. Check back later!</span>
+                <img src="assets/suit.png">
+              </ion-card>
+            </ng-template>
           </div>
-          
+
           <div class="earn-container">
+            <div class="header">
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <img src="assets/bonk.png" height="28px" style="margin-right: 8px;">
+                <h1>Bonk</h1>
+              </div>
+              <ion-icon (click)="showBonkQuests()" slot="icon-only" name="arrow-forward-circle-outline"></ion-icon>
+            </div>
+
+            <swiper *ngIf="bonkQuests().length > 0 else noQuests">
+              <ng-template *ngFor="let quest of bonkQuests()" swiperSlide>
+                <app-quest-card [quest]="quest" (onSuccess)="showSuccess($event)"></app-quest-card>
+              </ng-template>
+            </swiper>
+            <ng-template #noQuests>
+              <ion-card class="no-quests">
+                <span>Good job! You have completed all Quests!</span>
+                <img src="assets/suit.png">
+              </ion-card>
+            </ng-template>
+          </div>
+
+          
+          
+          <!--<div class="earn-container">
             <div class="header">
               <h1>Shop Online</h1>
               <ion-button (click)="showAllAffiliates()" fill="clear" color="dark">View All</ion-button>
@@ -68,16 +102,13 @@
                 <app-affiliate-card [affiliate]="affiliate"></app-affiliate-card>
               </ng-template>
             </swiper>
-          </div>
+          </div-->
 
 
 
         </section>
 
         <section *ngSwitchCase="'spend'"  class="spend">
-          <div class="searchbar-wrapper">
-            <ion-searchbar></ion-searchbar>
-          </div>
          <app-offer-card *ngFor="let offer of offers" [offer]="offer"></app-offer-card>
         </section>
 
@@ -88,20 +119,27 @@
 
   </main>
 
-  <ion-modal [isOpen]="successVisible" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]">
+  <ion-modal [isOpen]="reclaimSuccessVisible" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]" [handle]="false" class="modal-success">
     <ng-template>
-  
-  
-      <div class="success-wrapper">
+      <div class="modal-success-wrapper">
         <ng-lottie [options]="successOptions"></ng-lottie>
-        <span>You proved that you took <b>16</b> Rides on Uber</span>
+        <span>You proved that you took <b>{{currentSuccessStatus.earnedPoints.toFixed(2)}}</b> Rides on Uber</span>
         <br>
-        <span>You earned <b>0.16</b> Bonny Tokens</span>
+        <span>You earned <b>0.{{currentSuccessStatus.earnedPoints}}</b> Bonny Tokens</span>
         <ion-button class="success-button" (click)="hideReclaimSuccess()" >Acknowledge</ion-button>
       </div>
-  
-  
-  
+    </ng-template>
+  </ion-modal> 
+
+
+  <ion-modal [isOpen]="questSuccessVisible" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]" [handle]="false" class="modal-success">
+    <ng-template>
+      <div class="modal-success-wrapper">
+        <ng-lottie [options]="successOptions"></ng-lottie>
+        <span>You completed the Quest and earned <b>{{currentSuccessStatus.earnedPoints.toFixed(2)}}</b> Bonny Tokens</span>
+        <br>
+        <ion-button class="success-button" (click)="hideQuestSuccess()" >Acknowledge</ion-button>
+      </div>
     </ng-template>
   </ion-modal> 
 

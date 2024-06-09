@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.locards.bonnydev',
+  appId: 'com.bonny.bonnyapp',
   appName: 'bonny',
   webDir: 'www',
   server: {

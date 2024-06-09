@@ -31,6 +31,7 @@ export const processUpload = onObjectFinalized(
     const contentType = event.data.contentType;
     const userId = event.data.metadata?.userId;
     const fcmToken = event.data.metadata?.fcmToken;
+    const couponKey = event.data.metadata?.couponKey;
     const md5hash = event.data.md5Hash; // TODO: use for checking duplicates before sending to documentAI
     console.log(`Data:${Object.keys(event.data)}`);
     console.log(
@@ -80,6 +81,7 @@ export const processUpload = onObjectFinalized(
           userId: userId,
           md5hash: md5hash,
           fcmToken: fcmToken || "",
+          couponKey: couponKey || "",
         },
       });
       console.log("Successfully published document to topic 'extracted-receipt-data'");
@@ -96,6 +98,7 @@ export const processUpload = onObjectFinalized(
           contentType: contentType,
           userId: userId,
           fcmToken: fcmToken || "",
+          couponKey: couponKey || "",
         },
       });
       // TODO: delete uploaded file

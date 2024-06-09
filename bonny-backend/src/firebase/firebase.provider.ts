@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {firebaseConfig} from './firebase.config';
+import { firebaseConfig } from './firebase.config';
 import * as firebase from 'firebase-admin';
 
 const firebase_params = {

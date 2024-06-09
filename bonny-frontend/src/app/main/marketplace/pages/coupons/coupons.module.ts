@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { CouponsPageRoutingModule } from './coupons-routing.module';
 import { CouponsPage } from './coupons.page';
 import { MarketplaceComponentModule } from '../../components/marketplace.components.module';
+import { LottieComponent } from 'ngx-lottie';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { MarketplaceComponentModule } from '../../components/marketplace.compone
     FormsModule,
     IonicModule,
     CouponsPageRoutingModule,
+    LottieComponent,
     MarketplaceComponentModule
   ],
   declarations: [CouponsPage]

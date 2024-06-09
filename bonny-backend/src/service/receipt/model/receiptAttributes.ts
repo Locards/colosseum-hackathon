@@ -5,4 +5,5 @@ export interface ReceiptAttributes {
   userId: string;
   md5hash: string;
   fcmToken: string;
+  couponKey: string;
 }

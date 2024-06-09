@@ -12,7 +12,7 @@ import { ScanService } from 'src/app/receipt/service/scan.service';
 export class CouponCardComponent  implements OnInit {
 
   //@ts-ignore
-  @Input("coupon") coupon: Coupon
+  @Input("coupon") coupon: TCoupon
 
   //@ts-ignore
   @Input("canActivate") canActivate: boolean
@@ -24,7 +24,12 @@ export class CouponCardComponent  implements OnInit {
   @Output("activate") activate: EventEmitter<ElementRef> = new EventEmitter<ElementRef>()
 
   //@ts-ignore
+  @Output("scan") scan: EventEmitter<Coupon> = new EventEmitter<Coupon>()
+
+  //@ts-ignore
   @ViewChild("card") card: ElementRef
+
+  loading: boolean = false 
 
   constructor(
     private modalCtrl: ModalController,
@@ -47,8 +52,10 @@ export class CouponCardComponent  implements OnInit {
         this.activateCoupon();
         break;
     }
+  }
 
-    
+  isRedeemed() {
+    return this.coupon.status === 'redeemed';
   }
 
   showAllCoupons() {
@@ -60,7 +67,7 @@ export class CouponCardComponent  implements OnInit {
   }
 
   async scanReceipt() {
-    await this.scanService.scanReceipt()
+    this.scan.emit(this.coupon)
   }
 
 }

@@ -1,10 +1,8 @@
 main {
-    height: 100%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
 
     animation: 0.2s fade-in ease-in-out forwards;
+    background: whitesmoke;
 
     @keyframes fade-in {
         0%{opacity: 0;}
@@ -12,22 +10,24 @@ main {
     }
 }
 
+ion-segment {
+    position: sticky;
+    top: 0;
+    background-color: whitesmoke;
+    z-index: 5;
+}
+
 .content {
     height: 100%;
 }
 
 .overview {
-    height: 100%;
-    display: grid;
-    place-items: center;
-    grid-template-rows: 70% 30%;
 
     .overview-container {
-        height: 100%;
-        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         padding-top: 64px;
     }
 
@@ -45,7 +45,7 @@ main {
         margin-bottom: 32px;
 
         h1 {
-            font-size: 4rem;
+            font-size: 48px;
             font-weight: bold;
             display: flex;
             justify-content: center;
@@ -53,8 +53,8 @@ main {
 
             img {
                 margin-left: 16px;
-                height: 4rem;
-                width: 4rem;
+                height: 48px;
+                width: 48px;
             }
         }
     }
@@ -63,10 +63,16 @@ main {
         width: 90%;
         cursor: pointer;
         --border-width: 1px;
-        --border-radius: 4px;
+        --border-radius: 64px;
+        --border-color: black;
+        color: black;
         --inner-padding-top: 8px;
         --inner-padding-bottom: 8px;
         padding: 8px;
+
+        ion-icon {
+            color: black !important;
+        }
     }
 
     ion-button {
@@ -100,16 +106,18 @@ main {
     }
 
     .header {
-        font-size: 1.4rem;
+        font-size: 24px;
         padding: 0 8px;
     }
 
     ion-list {
         overflow-y: scroll;
         padding-top: 0 !important;
+        background-color: whitesmoke !important;
 
         ion-item-divider {
             position: sticky;
+            background-color: white;
             top: 0;
             z-index: 10;
         }
@@ -117,8 +125,8 @@ main {
 
     ion-item-group {
         margin: 8px;
-        box-shadow: 0px 0px 4px 2px lightgray;
-        border: 2px lightgray;
+        border: 2px black;
+        border: 1px solid black;
     }
 
 }

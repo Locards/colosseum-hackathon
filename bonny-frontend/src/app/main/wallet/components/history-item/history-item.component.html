@@ -2,7 +2,7 @@
   <ion-icon name="receipt-outline" slot="start"></ion-icon>
   <ion-label class="item-desc">
     <span class="item-title">{{transaction.receipt.supplierName}}</span>
-    <span class="item-subtitle">{{transaction.type}}</span>
+    <span class="item-subtitle">Receipt Upload</span>
   </ion-label>
 
   <div class="item-details" [ngClass]="transaction.status == 'confirmed' ? 'confirmed' : 'pending'" slot="end">

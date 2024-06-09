@@ -20,7 +20,7 @@ export class GalleryService {
 
     if(!files) return false;
 
-    await this.uploadService.uploadFilesBatch(files)
+    await this.uploadService.uploadPickerFiles(files, {})
 
     return true;
   }

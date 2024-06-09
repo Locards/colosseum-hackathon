@@ -1,10 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Dialog } from '@capacitor/dialog';
-import { PushNotificationSchema, PushNotifications } from '@capacitor/push-notifications';
-import { Platform } from '@ionic/angular';
 import { Observable, tap, of, map, BehaviorSubject } from 'rxjs';
-import { CouponStatus } from 'src/app/model/Coupon';
 import { Home } from 'src/app/model/Home';
 import { Profile } from 'src/app/model/Profile';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -23,7 +19,7 @@ export class HomeService {
   private profileSubject: BehaviorSubject<Profile> = new BehaviorSubject<Profile>(undefined)
 
 
-  constructor(private http: HttpClient, private authentication: AuthenticationService, private platform: Platform) { }
+  constructor(private http: HttpClient, private authentication: AuthenticationService) { }
 
 
   loadHome(): Observable<Home> {
@@ -57,6 +53,16 @@ export class HomeService {
     this.activatedCouponsSubject.next(this.activatedCouponsSubject.value+1)
   }
 
+  addTokens(additionalTokens: number) {
+    this.profileSubject.next(
+      {
+        ...this.profileSubject.value,
+        tokens: this.profileSubject.value.tokens + additionalTokens
+      }
+    )
+    console.log(this.profileSubject.value)
+  }
+
   addPendingTransaction() {
 
     let txs = this.profileSubject.value.transactions
@@ -70,7 +76,9 @@ export class HomeService {
         totalAmount: 0,
         receiptDate: new Date().toString(),
         hash: ""
-      }
+      },
+      questStatus: null,
+      timestamp: new Date().toString()
     })
 
     this.profileSubject.next(
@@ -81,8 +89,8 @@ export class HomeService {
     )
   }
 
-  pollTransactions() {
-    /*if(this.platform.is('android')){
+  async pollTransactions() {
+    /* if(Capacitor.isNativePlatform()){
       PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotificationSchema) => {
           if(notification.data['hash']) {
@@ -92,17 +100,24 @@ export class HomeService {
           }
         }
       );
-    } else {*/
+    } else { */
+
+
+    return new Promise((resolve, rejcet) => {
       const interval = setInterval(() => {
         this.http.get<Home>(`${environment.backendUrl}/home`,{params: {uid: this.authentication.getUser().uid}}).subscribe((home: Home) => {
-          if(home.profile.transactions.length == this.profileSubject.value.transactions.length) {
+          if(home.profile.transactions.length >= this.profileSubject.value.transactions.length) {
             this.profileSubject.next(home.profile)
             clearInterval(interval)
+            resolve(home)
           }
         }) 
       },2000)
-    //}
+    
+    })
   }
+
+  // }
 
 
 }

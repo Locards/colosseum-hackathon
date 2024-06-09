@@ -24,6 +24,8 @@ export class Coupon {
   expiryDate: Date;
   @Column()
   imageUrl: string;
+  @Column({nullable: true, default: 0})
+  multiplier: number;
   @OneToMany(() => CouponStatus, (couponStatus) => couponStatus.coupon)
   statuses: CouponStatus[];
 }

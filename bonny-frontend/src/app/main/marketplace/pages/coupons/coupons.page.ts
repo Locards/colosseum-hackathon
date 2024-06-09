@@ -5,6 +5,9 @@ import { MarketplaceService } from '../../marketplace.service';
 import { HomeService } from 'src/app/main/home/home.service';
 import { Profile } from 'src/app/model/Profile';
 import * as _ from 'lodash'
+import { ScanService } from 'src/app/receipt/service/scan.service';
+import { Home } from 'src/app/model/Home';
+import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-coupons',
@@ -18,11 +21,20 @@ export class CouponsPage implements OnInit {
   coupons: TCoupon[] = []
   visibleCoupons: TCoupon[] = []
   filter: Filter = "all"
+  showSuccess: boolean = false
+  earnedPoints: number = 0
+
+  successOptions: AnimationOptions = {
+    path: '/assets/animations/success.json',
+    loop: false
+  }
+
 
   constructor(
     private marketplaceService: MarketplaceService,
     private homeService: HomeService,
-    private nav: NavController
+    private nav: NavController,
+    private scanService: ScanService
   ) { 
     this.load()
   }
@@ -68,6 +80,23 @@ export class CouponsPage implements OnInit {
       coupon.status = "active"
       this.homeService.addActiveCoupon()
     })
+  }
+
+  async scanCoupon(coupon: TCoupon, event: any) {
+    coupon.loading = true
+    const success = await this.scanService.scanReceipt(coupon.id)
+    if(!success) coupon.loading = false
+    else {
+      this.homeService.addPendingTransaction()
+      const home = (await this.homeService.pollTransactions() as Home)
+      this.coupons = this.coupons.filter((c: TCoupon) => c.id != coupon.id)
+      this.earnedPoints = home.profile.transactions[home.profile.transactions.length - 1].tokens
+      this.showSuccess = true
+    }
+  }
+ 
+  hideSuccess() {
+    this.showSuccess = false
   }
 
   navigateBack() {

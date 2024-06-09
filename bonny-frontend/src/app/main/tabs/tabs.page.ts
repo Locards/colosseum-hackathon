@@ -105,6 +105,9 @@ export class TabsPage {
         
         },2500)
 
+        this.homeService.addPendingTransaction()
+        this.homeService.pollTransactions()
+        this.nav.navigateForward("/tabs/wallet/history")
         await Haptics.vibrate({duration: 300})
 
 

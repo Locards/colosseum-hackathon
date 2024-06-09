@@ -3,6 +3,9 @@ import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quest, QuestStatus } from './quest.entity';
 import { ProfileService } from '../profile/profile.service';
+import { TransactionService } from '../transaction/transaction.service';
+import { Transaction } from '../transaction/transaction.entity';
+import { StatsService } from '../stats/stats.service';
 
 @Injectable()
 export class QuestService {
@@ -11,7 +14,9 @@ export class QuestService {
     private questRepository: Repository<Quest>,
     @InjectRepository(QuestStatus)
     private statusRepository: Repository<QuestStatus>,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private transactionService: TransactionService,
+    private stats: StatsService
   ) {}
 
   async getAllActiveQuestsForUser(uid: string): Promise<Quest[]> {
@@ -20,7 +25,8 @@ export class QuestService {
     .leftJoinAndSelect('quest.survey', 'survey')
     .leftJoinAndSelect('survey.questions', 'question')
     .leftJoinAndSelect('question.options', 'option')
-    .where(qb => {
+    .where('quest.enabled = true')
+    .andWhere(qb => {
       // Subquery to select quests that do have a status for this user
       const subQuery = qb.subQuery()
         .select('questStatus.questId')
@@ -37,14 +43,37 @@ export class QuestService {
 
 
   async completeQuest(uid: string, qid: number): Promise<any> {
-    return await this.statusRepository.save({
+
+    const profile = await this.profileService.get(uid)
+    const quest = await this.get(qid)
+
+    await this.profileService.update(uid, {tokens: profile.tokens + quest.points})
+
+    const status = await this.statusRepository.save({
       id: 0,
-      profile: await this.profileService.get(uid),
-      quest: await this.get(qid),
+      profile: profile,
+      quest: quest,
       status: "done",
       completedDate: new Date()
     })
-    
+
+    await this.transactionService.add(
+      {
+        id: 0,
+        type: "quest",
+        status: "confirmed",
+        tokens: quest.points,
+        blockchainTxId: "",
+        receipt: null,
+        questStatus: status,
+        profile: profile,
+        timestamp: new Date()
+      }
+    )
+
+    await this.stats.addQuest(quest)
+
+    return {gainedPoints: quest.points}
   }
 
   async add(quest: Quest): Promise<Quest> {

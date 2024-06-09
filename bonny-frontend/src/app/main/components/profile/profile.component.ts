@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { ModalController, NavController, ToastController } from '@ionic/angular';
 
@@ -9,6 +9,9 @@ import { ModalController, NavController, ToastController } from '@ionic/angular'
 })
 export class ProfileComponent  implements OnInit {
 
+
+  @Input("avatarNumber") avatarNumber: number = 0
+  @Input("name") name: string = ""
 
   constructor(private modalCtrl: ModalController, private fireAuth: Auth, private toastCtrl: ToastController, private nav: NavController) { }
 
@@ -33,6 +36,18 @@ export class ProfileComponent  implements OnInit {
       this.nav.navigateBack("/login")
     })
     .catch()
+  }
+
+  showToc() {
+    window.open("https://bonny.so/toc", "_blank")
+  }
+
+  showPrivacy() {
+    window.open("https://bonny.so/privacy-statement", "_blank")
+  }
+
+  getAvatar() {
+    return `assets/avatars/${this.avatarNumber}.png`
   }
 
 }

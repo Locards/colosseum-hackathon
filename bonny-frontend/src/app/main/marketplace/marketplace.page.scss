@@ -1,9 +1,9 @@
 main {
     height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-rows: 10% 6.5% 83.5%;
     animation: 0.2s fade-in ease-in-out forwards;
+    background-color: whitesmoke;
+    overflow-y: scroll;
 
     @keyframes fade-in {
         0%{opacity: 0;}
@@ -11,8 +11,15 @@ main {
     }
 }
 
+ion-segment {
+    position: sticky;
+    top: 0;
+    background-color: whitesmoke;
+    z-index: 5;
+}
+
 .content {
-    background: #edf8ff;
+    background: whitesmoke;
 }
 
 
@@ -24,7 +31,7 @@ main {
 
     .text-container {
 
-        font-size: 0.8rem;
+        font-size: 16px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -32,7 +39,7 @@ main {
 
 
         .points {
-            font-size: 1.4rem;
+            font-size: 24px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -57,22 +64,25 @@ main {
 
         width: 100vw;
         max-width: 453.2px;
+        ion-icon {
+            height: 24px;
+            width: 24px
+        }
 
         .header {
 
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: white;
-            padding: 12px;
-            border-radius: 4px;
-            box-shadow: 2px 2px 5px -1px lightgray;
+            padding: 6px;
             margin-left: 10px;
             margin-right: 10px;
             margin-top: 14px;
+            border-bottom: 2px solid;
 
             h1 {
-                margin: 0 !important
+                margin: 0 !important;
+                font-size: 24px !important;
             }
 
         }
@@ -100,24 +110,20 @@ main {
 .spend {
     height: 100%;
     overflow-y: scroll;
-
-    .searchbar-wrapper {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background-color: white;
-    }
 }
 
-
-.success-wrapper {
+.no-quests {
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-}
 
-.success-button {
-    width: 65%;
-    margin-top: 16px;
+    img {
+        transform: scaleX(-1);
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        height: 80px;
+        width: 80px;
+    }
 }

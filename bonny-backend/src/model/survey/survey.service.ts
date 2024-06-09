@@ -48,14 +48,25 @@ export class SurveyService {
 
     for(let a of answer.answers) {
       const question = await this.questionRepository.findOneBy({id: a.questionId})
-      const option = await this.questionOptionRepository.findOneBy({id: a.optionId})
-      await this.answerRepository.save({
-        id: 0,
-        profile: profile,
-        question: question,
-        selectedOption: option
-      })
+
+      if(question.type == "text") {
+        await this.answerRepository.save({
+          id: 0,
+          profile: profile,
+          question: question,
+          freeText: a.freeText
+        })
+      } else {
+        const option = await this.questionOptionRepository.findOneBy({id: a.optionId})
+        await this.answerRepository.save({
+          id: 0,
+          profile: profile,
+          question: question,
+          selectedOption: option
+        })
+      }
     }
+
 
   }
 

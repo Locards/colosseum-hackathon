@@ -15,9 +15,9 @@ export class Receipt {
   storageUrl: string;
   @Column()
   supplierName: string;
-  @Column({type: "float"})
+  @Column({ type: 'float' })
   totalAmount: number;
-  @Column()
+  @Column({ nullable: true })
   receiptDate: Date;
   @Column()
   hash: string;

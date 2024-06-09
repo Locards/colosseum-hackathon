@@ -5,10 +5,12 @@
       <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
     </ion-tab-button>
     <ion-tab-button tab="marketplace/earn" href="/tabs/marketplace/earn">
-      <ion-icon aria-hidden="true" name="pricetag-outline"></ion-icon>
+      <ion-icon aria-hidden="true" name="server-outline"></ion-icon>
     </ion-tab-button>
     <ion-tab-button>
-      <ion-icon aria-hidden="true"></ion-icon>
+      <ion-fab-button (click)="showActions()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
     </ion-tab-button>
     <ion-tab-button tab="wallet/overview" href="/tabs/wallet/history">
         <ion-icon aria-hidden="true" name="wallet-outline"></ion-icon>
@@ -19,11 +21,7 @@
     </ion-tab-button>
   </ion-tab-bar>
 
-  <ion-fab>
-    <ion-fab-button (click)="showActions()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+
 
 
   <ion-modal [isOpen]="actionsVisible" [initialBreakpoint]="1" [breakpoints]="[0, 1]" (willDismiss)="hideActions()">
@@ -47,12 +45,12 @@
 
               <div class="action-button" (click)="perfomAction('upload')">
                 <ion-icon name="cloud-upload-outline"></ion-icon>
-                <span>PDF & Gallery</span>
+                <span>Files</span>
               </div>
     
               <div class="action-button" (click)="perfomAction('earn')">
-                <ion-icon name="cash-outline"></ion-icon>
-                <span>Earn Tokens</span>
+                <ion-icon name="ribbon-outline"></ion-icon>
+                <span>Quests</span>
               </div>
 
             </div>

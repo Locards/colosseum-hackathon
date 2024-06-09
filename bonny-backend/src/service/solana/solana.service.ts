@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { AnchorProvider } from '@coral-xyz/anchor'
-import { Connection, Keypair, PublicKey, SystemProgram, Transaction } from '@solana/web3.js'
+import { Connection, Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
 import * as anchor from '@coral-xyz/anchor'
 import * as fs from 'fs'
 import NodeWallet from '@coral-xyz/anchor/dist/cjs/nodewallet';
@@ -12,8 +12,8 @@ export class SolanaService implements OnModuleInit {
   
   memoProgram: PublicKey;
   connection: Connection;
-  provider: AnchorProvider; 
-  program: anchor.Program<BonnyProgramLibrary> 
+  provider: AnchorProvider;
+  program: anchor.Program<BonnyProgramLibrary>
 
   constructor(
     private pda: PdaService,
@@ -69,9 +69,9 @@ export class SolanaService implements OnModuleInit {
     var userId;
 
     try {
-      userId = this.pda.user(uid, this.program.programId)
+      userId = this.pda.user(uid, this.program.programId);
     } catch(e) {
-      userId = this.pda.userPubkey(new PublicKey(uid), this.program.programId)
+      userId = this.pda.userPubkey(new PublicKey(uid), this.program.programId);
     }
 
     const memo = {

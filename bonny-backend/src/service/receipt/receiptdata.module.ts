@@ -5,6 +5,9 @@ import { SolanaModule } from '../solana/solana.module';
 import { ProfileModule } from 'src/model/profile/profile.module';
 import { ReceiptModule } from 'src/model/receipt/receipt.module';
 import { FirebaseModule } from 'src/firebase/firebase.module';
+import { CouponStatus } from 'src/model/coupons/coupons.entity';
+import { CouponModule } from 'src/model/coupons/coupons.module';
+import { StatsModule } from 'src/model/stats/stats.module';
 
 @Module({
   providers: [ReceiptDataService],
@@ -14,6 +17,8 @@ import { FirebaseModule } from 'src/firebase/firebase.module';
     ProfileModule,
     ReceiptModule,
     FirebaseModule,
+    CouponModule,
+    StatsModule
   ],
 })
 export class ReceiptDataModule {}

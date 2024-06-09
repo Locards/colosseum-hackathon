@@ -1,8 +1,7 @@
 main {
     height: 100%;
     padding: 10%;
-    display: grid;
-    grid-template-rows: 5% 15% 45% 25% 10%;
+    background-color: whitesmoke;
 
     animation: 0.5s fade-in ease-in-out forwards;
 
@@ -13,14 +12,6 @@ main {
     
 }
 
-.back-button {
-    justify-self: flex-start;
-    padding: 12px;
-    border-radius: 4%;
-    border: solid 1px lightgray;
-    cursor: pointer;
-}
-
 .header {
     font-weight: bolder;
     color: var(--ion-color-primary);
@@ -28,12 +19,10 @@ main {
 
 .inputs {
 
-    * {
-        margin-top: 8px;
-    }
-
     ion-input {
         background: whitesmoke;
+        margin-top: 8px;
+
     }
     
     ion-button {
@@ -53,4 +42,10 @@ main {
 .sign-up {
     text-align: center;
     cursor: pointer;
+    margin-top: 8px;
+
+    a {
+        color: var(--ion-color-danger);
+    }
+
 }

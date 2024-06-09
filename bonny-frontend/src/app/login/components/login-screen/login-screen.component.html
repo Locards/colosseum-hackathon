@@ -1,7 +1,4 @@
 <main>
-
-  <ion-icon class="back-button" (click)="showSplash()" fill="outline" slot="icon-only" name="chevron-back"></ion-icon>
-
   <section class="header">
     <h1>Welcome back! Glad to see you Again!</h1>
   </section>
@@ -32,7 +29,9 @@
     <a (click)="showSignup()">Sign up now</a>
   </section>
 
-  <div class="divider">OR</div>
+  <div class="divider">
+    <span>OR</span>
+  </div>
 
   <section class="wallet-connect">
     <app-wallet-adapter></app-wallet-adapter>

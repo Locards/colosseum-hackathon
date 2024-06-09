@@ -9,6 +9,9 @@ import { ProfileService } from 'src/model/profile/profile.service';
 import { Receipt } from 'src/model/receipt/receipt.entity';
 import { ReceiptService } from 'src/model/receipt/receipt.service';
 import { FirebaseProvider } from 'src/firebase/firebase.provider';
+import { CouponService } from 'src/model/coupons/coupons.service';
+import { Coupon } from 'src/model/coupons/coupons.entity';
+import { StatsService } from 'src/model/stats/stats.service';
 
 @Injectable()
 export class ReceiptDataService implements OnModuleInit {
@@ -17,7 +20,9 @@ export class ReceiptDataService implements OnModuleInit {
     private receiptService: ReceiptService,
     private profileService: ProfileService,
     private firebaseProvider: FirebaseProvider,
-    private solana: SolanaService
+    private couponService: CouponService,
+    private solana: SolanaService,
+    private stats: StatsService
   ) {}
 
   onModuleInit() {
@@ -42,7 +47,7 @@ export class ReceiptDataService implements OnModuleInit {
       message.ack();
       return;
     }
-    
+
     try {
       const date = data.entities.filter(
         (entity) => entity.type == 'receipt_date',
@@ -50,22 +55,44 @@ export class ReceiptDataService implements OnModuleInit {
       const supplier = data.entities.filter(
         (entity) => entity.type == 'supplier_name',
       );
-      var totalAmount = data.entities.filter(
+      if (!supplier) {
+        throw new Error('Could not extract supplier from image.');
+      }
+      let totalAmount = data.entities.filter(
         (entity) => entity.type == 'total_amount',
       );
       const netAmount = data.entities.filter(
-        (entity) => entity.type == 'net_amount'
+        (entity) => entity.type == 'net_amount',
       );
 
-      if(totalAmount[0] == undefined) totalAmount = netAmount
+      if (totalAmount[0] == undefined) totalAmount = netAmount;
 
       const parsed = {
-          receiptDate: new Date(date[0]?.normalizedValue ? date[0].normalizedValue.text : date[0].mentionText),
-          supplierName: supplier[0]?.normalizedValue ? supplier[0].normalizedValue.text : supplier[0].mentionText,
-          totalAmount: Number(totalAmount[0]?.normalizedValue ? totalAmount[0].normalizedValue.text : totalAmount[0].mentionText)
+        receiptDate: this.getValidDateOrToday(date),
+        supplierName: supplier[0]?.normalizedValue
+          ? supplier[0].normalizedValue.text
+          : supplier[0].mentionText,
+        totalAmount: Number(
+          totalAmount[0]?.normalizedValue
+            ? totalAmount[0].normalizedValue.text
+            : totalAmount[0].mentionText,
+        ),
+      };
+
+      let tokenAmount;
+      const cid = Number(attributes.couponKey);
+      if (Number.isNaN(cid) || cid == 0) {
+        tokenAmount = await this.calculateTokenAmount(parsed.totalAmount);
+      } else {
+        const coupon = await this.couponService.get(cid);
+        tokenAmount = await this.calculateTokenAmount(
+          parsed.totalAmount,
+          coupon,
+        );
+        await this.couponService.redeemCoupon(data.userId, coupon);
       }
 
-      const tokenAmount = this.calculateTokenAmount(data.userId, parsed.totalAmount)
+      console.log(data);
 
       const profile = await this.profileService.get(attributes.userId);
 
@@ -73,17 +100,19 @@ export class ReceiptDataService implements OnModuleInit {
         data.userId,
         tokenAmount,
         attributes.md5hash,
-        "receipt_upload"
-      )
+        'receipt_upload',
+      );
 
       const transaction: Transaction = {
         id: 0,
-        type: 'receipt_upload',
+        type: cid ? 'coupon' : 'receipt_upload',
         status: 'confirmed',
         tokens: tokenAmount,
         blockchainTxId: txid,
         receipt: null,
+        questStatus: null,
         profile: profile,
+        timestamp: new Date(),
       };
 
       const tx = await this.txService.add(transaction);
@@ -104,6 +133,9 @@ export class ReceiptDataService implements OnModuleInit {
         tokens: profile.tokens + tokenAmount,
       });
 
+
+      await this.stats.addReceipt(tokenAmount)
+
       // see also https://firebase.google.com/docs/cloud-messaging/send-message
       // and https://firebase.google.com/docs/reference/admin/node/firebase-admin.messaging.messaging?hl=de
       this.sendMobileNotification(
@@ -113,17 +145,17 @@ export class ReceiptDataService implements OnModuleInit {
       );
 
       message.ack();
-    }catch(e) {
+    } catch (e) {
       this.sendMobileNotification(
         attributes,
         'Image Processing Failed',
         'Please try again.',
       );
-      console.log(e)
+      console.log(e);
       message.ack();
     }
   }
-  
+
   private sendMobileNotification(
     attributes: ReceiptAttributes,
     title: string,
@@ -153,7 +185,19 @@ export class ReceiptDataService implements OnModuleInit {
     }
   }
 
-  calculateTokenAmount(uid: string, netAmount: number) {
-    return Math.floor(netAmount * 100) / 10000;
+  async calculateTokenAmount(netAmount: number, coupon?: Coupon) {
+    let tokens = Math.floor(netAmount * 100) * 0.0005;
+    if (coupon) tokens *= coupon.multiplier;
+    return tokens;
+  }
+
+  private getValidDateOrToday(extractedDate: any | undefined): Date {
+    if (!extractedDate || extractedDate.length === 0) {
+      return new Date();
+    } else {
+      return extractedDate[0]?.normalizedValue
+        ? new Date(extractedDate[0].normalizedValue.text)
+        : new Date(extractedDate[0].mentionText)
+    }
   }
 }

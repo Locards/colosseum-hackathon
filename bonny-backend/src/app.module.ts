@@ -16,6 +16,8 @@ import { ReclaimModule } from './controller/reclaim/reclaim.module';
 import { AuthModule } from './controller/auth/auth.module';
 import { UserModule } from './controller/user/user.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import { StatisticsModule } from './controller/stats/statistics.module';
+import { StatsModule } from './model/stats/stats.module';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { FirebaseModule } from './firebase/firebase.module';
     AuthModule,
     UserModule,
     FirebaseModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

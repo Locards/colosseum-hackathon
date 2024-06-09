@@ -1,23 +1,15 @@
 main {
     height: 100%;
     padding: 16px;
-    display: grid;
-    grid-template-rows: 5% 55% 40%;
-}
-
-.back-button {
-    justify-self: flex-start;
-    padding: 12px;
-    border-radius: 4%;
-    border: solid 1px lightgray;
-    cursor: pointer;
+    overflow-y: scroll;
+    padding-top: 64px;
 }
 
 img {
     border-radius: 8px;
     margin: 16px auto;
-    height: 100%;
-    width: auto;
+    height: auto;
+    width: 100%;
 }
 
 .loading-container {

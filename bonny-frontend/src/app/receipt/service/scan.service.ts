@@ -15,12 +15,12 @@ export class ScanService {
     private toastCtrl: ToastController
     ) { }
 
-  async scanReceipt() {
+  async scanReceipt(couponId?: number) {
 
     const file = await this.photoService.takeReceiptPhoto();
     if (!file) return false;
 
-    const result = await this.uploadService.uploadFile(file);
+    const result = await this.uploadService.uploadFile(file, couponId ? {couponKey: String(couponId)} : {});
 
     return true
   }

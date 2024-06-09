@@ -24,10 +24,6 @@ export class SignupScreenComponent  implements OnInit {
     this.loginService.changeState("login")
   }
 
-  showSplash() {
-    this.loginService.changeState("splash")
-  }
-
   signUp() {
     console.log(this.email)
     console.log(this.password)

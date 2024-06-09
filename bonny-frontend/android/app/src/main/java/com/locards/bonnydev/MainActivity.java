@@ -1,4 +1,4 @@
-package com.locards.bonnydev;
+package com.bonny.bonnyapp;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -14,7 +14,7 @@
 
       <div class="answer-container">
 
-        <ion-textarea [(ngModel)]="currentAnswer" *ngSwitchCase="'text'" fill="outline"></ion-textarea>
+        <ion-textarea [(ngModel)]="currentAnswer" *ngSwitchCase="'text'" fill="outline" mode="md"></ion-textarea>
         <ion-input [(ngModel)]="currentAnswer" *ngSwitchCase="'number'" type="number" fill="outline"></ion-input>
 
         <ion-radio-group *ngSwitchCase="'option'" [(ngModel)]="currentAnswer">

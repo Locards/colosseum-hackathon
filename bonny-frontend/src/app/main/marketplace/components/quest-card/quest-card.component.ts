@@ -4,6 +4,7 @@ import { Quest } from 'src/app/model/Quest';
 import { SurveyComponent } from '../survey/survey.component';
 import { MarketplaceService } from '../../marketplace.service';
 import { ReclaimAction } from 'src/app/model/Reclaim';
+import { HomeService } from 'src/app/main/home/home.service';
 
 @Component({
   selector: 'app-quest-card',
@@ -15,7 +16,7 @@ export class QuestCardComponent implements OnInit {
   //@ts-ignore
   @Input("quest") quest: Quest
 
-  @Output("onSuccess") onSuccess: EventEmitter<boolean> = new EventEmitter<boolean>()
+  @Output("onSuccess") onSuccess: EventEmitter<SuccessStatus> = new EventEmitter<SuccessStatus>()
 
   loading: boolean = false
   image: string = ""
@@ -23,22 +24,32 @@ export class QuestCardComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private marketplaceService: MarketplaceService,
+    private homeService: HomeService
   ) { }
 
   ngOnInit() {}
 
-  startQuest() {
+  async startQuest() {
     if(this.quest.survey) {
-      this.modalCtrl.create({
+      const modal = await this.modalCtrl.create({
         component: SurveyComponent,
         componentProps: {
           survey: this.quest.survey,
           questId: this.quest.id
         }
-      }).then(m => m.present())
+      })
+      
+    modal.present();
+    
+    const res = await modal.onWillDismiss() 
+
+    if(res.data.status == "success") {
+      this.showQuestSuccess(res.data.earnedPoints)
     }
 
-    if(this.quest.reclaim) {
+    }
+
+    else if(this.quest.reclaim) {
       this.loading = true;
 
       this.marketplaceService.reclaim(this.quest.reclaim!!.id).subscribe((res: ReclaimAction) => {
@@ -50,6 +61,15 @@ export class QuestCardComponent implements OnInit {
       })
 
     }
+
+    else {
+      window.open(this.quest.externalUrl)
+      this.marketplaceService.completeQuest(this.quest).subscribe((res) => {
+        this.showQuestSuccess(res.gainedPoints)
+        this.homeService.pollTransactions()
+      })
+    }
+    
   }
 
   pollReclaimStatus() {
@@ -62,7 +82,7 @@ export class QuestCardComponent implements OnInit {
           this.loading = false;
           clearInterval(interval)
 
-          this.showReclaimSuccess()
+          this.showReclaimSuccess(Number(res.extractedData))
         }
       })
     }, 4000)
@@ -70,8 +90,18 @@ export class QuestCardComponent implements OnInit {
   }
 
 
-  showReclaimSuccess() {
-    this.onSuccess.next(true)
+  showReclaimSuccess(earnedPoints: number) {
+    this.onSuccess.next({type: "reclaim", status: true, earnedPoints: earnedPoints})
   }
 
+  showQuestSuccess(earnedPoints: number) {
+    this.onSuccess.next({type: "quest", status: true, earnedPoints: earnedPoints})
+  }
+
+}
+
+export interface SuccessStatus {
+  type: "reclaim" | "quest",
+  status: boolean,
+  earnedPoints: number
 }

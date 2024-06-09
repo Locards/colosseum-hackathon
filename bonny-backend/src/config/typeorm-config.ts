@@ -33,7 +33,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       await dataSource.initialize();
       return dataSource;
     } else {
-      const dataSource = new DataSource(databaseConfig);
+      const dataSource = new DataSource(options);
       return dataSource;
     }
   },

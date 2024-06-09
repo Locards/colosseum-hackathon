@@ -14,6 +14,7 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 import { Dialog } from '@capacitor/dialog';
+import { Profile } from 'src/app/model/Profile';
 
 SwiperCore.use([Pagination, Autoplay, EffectCoverflow])
 
@@ -33,6 +34,8 @@ export class HomePage implements OnInit {
 
   deals: SpecialOffer[] = []
 
+  avatarNumber: number = 1
+
   constructor(
     private auth: AuthenticationService,
     private modalCtrl: ModalController,
@@ -41,6 +44,8 @@ export class HomePage implements OnInit {
     private platform: Platform
   ) {
     this.loadHome()
+
+    this.avatarNumber = Math.ceil(Math.random() * 15)
   }
 
   ngOnInit() {
@@ -49,25 +54,48 @@ export class HomePage implements OnInit {
     if(this.platform.is('capacitor')) {
       this.addPushNotificationListener();
     }
-
   }
 
-  loadHome() {
+  loadHome(event?: any) {
     this.homeService.loadHome().subscribe((home: Home) => {
       this.home = home
       //this.deals = this.home.specialOffers.slice(0, 3)
       this.deals = [
-        {id: 2, title: "",  description: "", imageUrl: "assets/commercial.png"},
-        {id: 3, title: "",  description: "", imageUrl: "assets/commercial_2.png"},
+        {id: 4, title: "",  description: "", imageUrl: "assets/telegram.jpeg", externalUrl: "/tabs/marketplace/earn", type: "quest"},
+        {id: 5, title: "",  description: "", imageUrl: "assets/bonk.jpeg", externalUrl: "/tabs/marketplace/earn", type: "quest"},
         ]
-      console.log(this.deals)
+      if(!event) this.listenToProfile()
+      else event.target.complete()
     })
   }
 
+  openDeal(offer: SpecialOffer) {
+    switch(offer.type) {
+      case "link":
+        window.open(offer.externalUrl, "_blank")
+        break;
+
+      case "quest":
+        this.nav.navigateForward(offer.externalUrl)
+    }
+  }
+
+  listenToProfile() {
+    this.homeService.getProfile$().subscribe((profile: Profile) => this.home.profile = profile)
+}
+
   showProfile() {
     this.modalCtrl.create({
-      component: ProfileComponent
+      component: ProfileComponent,
+      componentProps: {
+        avatarNumber: this.avatarNumber,
+        name: this.home.profile.email
+      }
     }).then(m => m.present())
+  }
+
+  showWallet() {
+    this.nav.navigateForward("/tabs/wallet/overview")
   }
 
   showHistory() {
@@ -110,6 +138,10 @@ export class HomePage implements OnInit {
         });*/
       }
     );
+  }
+
+  getAvatar() {
+    return `assets/avatars/${this.avatarNumber}.png`
   }
 
 }

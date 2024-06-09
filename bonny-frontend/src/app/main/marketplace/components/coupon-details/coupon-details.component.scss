@@ -5,14 +5,6 @@ main {
     grid-template-rows: 5% 30% 57.5% 6.5%;
 }
 
-.back-button {
-    justify-self: flex-start;
-    padding: 12px;
-    border-radius: 4%;
-    border: solid 1px lightgray;
-    cursor: pointer;
-}
-
 
 .image-container {
     width: 100%;
@@ -41,6 +33,6 @@ h1 {
     justify-content: center;
     align-items: center;
     top: 8px;
-    font-size: 1rem;
+    font-size: 24px;
     color: grey;
 }

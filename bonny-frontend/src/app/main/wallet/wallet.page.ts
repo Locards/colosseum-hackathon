@@ -19,6 +19,7 @@ export class WalletPage implements OnInit {
   filter: Filter = "all"
   filterText: string = ""
   history: History[] = []
+  filteredHistory: History[] = []
 
   //@ts-ignore
   profile: Profile = undefined
@@ -37,15 +38,17 @@ export class WalletPage implements OnInit {
   loadProfile() {
     this.homeService.getProfile$().subscribe((profile: Profile) => {
       this.profile = profile
-      this.setHistory(profile.transactions.filter((tx: Transaction) => tx.receipt))
+      this.setHistory(profile.transactions)
     })
   }
 
   setHistory(transactions: Transaction[]) {
+
+    console.log(transactions)
   
     let grouped = _.groupBy(
       transactions,
-      (tx: Transaction) => format(new Date(tx.receipt.receiptDate), "yyyy-MM-dd")
+      (tx: Transaction) => format(new Date(tx.timestamp), "yyyy-MM-dd")
     )
     
     this.history = _.orderBy(
@@ -53,7 +56,7 @@ export class WalletPage implements OnInit {
         timestamp: date,
         transactions: _.orderBy(
           grouped[date],
-          (tx: Transaction) => tx.receipt.receiptDate,
+          (tx: Transaction) => tx.timestamp,
           'desc'
         )
       })),
@@ -62,6 +65,7 @@ export class WalletPage implements OnInit {
     )
 
     console.log(this.history)
+    this.setFilteredHistory()
   }
 
   listenToSectionParam() {
@@ -73,6 +77,7 @@ export class WalletPage implements OnInit {
 
   selectFilter(filter: Filter) {
     this.filter = filter
+    this.setFilteredHistory()
   }
 
   getFilterColor(filter: Filter) {
@@ -81,8 +86,9 @@ export class WalletPage implements OnInit {
   }
 
 
-  getFilteredHistory() {
-    return this.history.map((h: History) => {
+  setFilteredHistory() {
+
+    this.filteredHistory = this.history.map((h: History) => {
       return {
         timestamp: h.timestamp,
         transactions: h.transactions
@@ -91,6 +97,7 @@ export class WalletPage implements OnInit {
           return transaction.status == this.filter
         })
         .filter((transaction: Transaction) => {
+          if(!transaction.receipt) return true
           return transaction.receipt.supplierName.toLowerCase().includes(this.filterText.trim().toLowerCase())
         })
       }

@@ -2,7 +2,7 @@
 
   <main *ngIf="profile">
 
-    <ion-segment [(ngModel)]="segment" >
+    <ion-segment [(ngModel)]="segment" mode="md">
       <ion-segment-button value="overview">
         <ion-label>Overview</ion-label>
       </ion-segment-button>
@@ -36,31 +36,30 @@
               <ion-label>My Purchases</ion-label>
               <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
             </ion-item>
+
           </div>
 
-          <ion-button color="primary" size="large">Pay out</ion-button>
 
         </section>
 
 
         <section *ngSwitchCase="'history'" class="history">
-          <ion-searchbar [(ngModel)]="filterText"></ion-searchbar>
+          <ion-list lines="none" mode="md">
 
-          <div class="filter-container">
-            <ion-chip (click)="selectFilter('all')" [color]="getFilterColor('all')">All</ion-chip>
-            <ion-chip (click)="selectFilter('pending')" [color]="getFilterColor('pending')">Pending</ion-chip>
-            <ion-chip (click)="selectFilter('confirmed')" [color]="getFilterColor('confirmed')">Confirmed</ion-chip>
-          </div>
-
-          <ion-list lines="none">
-
-            <ion-item-group *ngFor="let item of getFilteredHistory()">
+            <ion-item-group *ngFor="let item of filteredHistory">
 
               <ion-item-divider>
                 <ion-label>{{item.timestamp | date }}</ion-label>
               </ion-item-divider>
   
-              <app-history-item *ngFor="let transaction of item.transactions" [transaction]="transaction"></app-history-item>
+              <ng-container *ngFor="let transaction of item.transactions">
+                <ng-cotainer [ngSwitch]="transaction.type">
+                  <app-history-item *ngSwitchCase="'receipt_upload'" [transaction]="transaction"></app-history-item>
+                  <app-quest-item *ngSwitchCase="'quest'" [transaction]="transaction"></app-quest-item>
+                  <app-coupon-item *ngSwitchCase="'coupon'" [transaction]="transaction"></app-coupon-item>
+                </ng-cotainer>
+              </ng-container>
+              
               
             </ion-item-group>
 

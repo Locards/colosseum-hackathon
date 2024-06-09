@@ -1,7 +1,7 @@
 <ion-item lines="none" (click)="showModal()">
-  <img *ngIf="selectedAdapter?.icon" [src]="selectedAdapter.icon" height="32" width="32">
-  <ion-icon *ngIf="!selectedAdapter" name="wallet-outline" slot="start"></ion-icon>
-  <ion-label>{{getLabel()}}</ion-label>
+  <img *ngIf="selectedAdapter?.icon" [src]="selectedAdapter.icon" height="32" width="32" style="background-color: whitesmoke;">
+  <ion-icon *ngIf="!selectedAdapter" name="wallet-outline" slot="start" style="background-color: whitesmoke;"></ion-icon>
+  <ion-label style="background-color: whitesmoke;">{{getLabel()}}</ion-label>
   <ion-spinner name="dots" *ngIf="connecting"></ion-spinner>
 </ion-item>
 

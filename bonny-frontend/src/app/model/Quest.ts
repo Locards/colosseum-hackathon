@@ -9,4 +9,5 @@ export interface Quest {
     imageUrl: string;
     survey?: Survey;
     reclaim?: Reclaim;
+    externalUrl: string;
 }

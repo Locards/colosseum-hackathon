@@ -8,7 +8,7 @@ import { LoginService, LoginState } from './service/login.service';
 })
 export class LoginPage implements OnInit {
 
-  state: LoginState = "splash"
+  state: LoginState = "login"
 
   constructor(private loginService: LoginService) {
     loginService.getState$().subscribe((state) => {
@@ -18,8 +18,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
-  showSplash() {
-    this.loginService.changeState("splash")
-  }
+
 
 }

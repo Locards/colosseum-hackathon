@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Quest } from 'src/app/model/Quest';
 import { MarketplaceService } from '../../marketplace.service';
+import { Marketplace } from 'src/app/model/Marketplace';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-quests',
@@ -14,17 +16,20 @@ export class QuestsPage implements OnInit {
 
   constructor(
     private marketplaceService: MarketplaceService,
-    private nav: NavController
+    private nav: NavController,
+    private route: ActivatedRoute
   ) { 
     this.loadQuests()
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   loadQuests() {
-    this.marketplaceService.getQuests().subscribe((quests: Quest[]) => {
-      this.quests = quests
+    this.marketplaceService.getMarketplace$().subscribe((marketplace: Marketplace) => {
+      this.route.queryParams.subscribe(params => {
+        if(params["filter"] == "bonk") this.quests = marketplace.quests.filter((quest: Quest) => quest.type == "bonk");
+        else this.quests = marketplace.quests.filter((quest: Quest) => quest.type != "bonk")
+      })
     })
   }
 

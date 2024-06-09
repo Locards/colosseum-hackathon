@@ -1,7 +1,10 @@
 // photo.service.ts
 import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, GalleryPhotos, GalleryPhoto, PermissionStatus, Photo } from '@capacitor/camera';
+import { Filesystem } from '@capacitor/filesystem'
 import { UploadFileReference } from './uploadfile.dto';
+import { Platform } from '@ionic/angular';
+import { File, FilePicker, PickFilesResult } from '@capawesome/capacitor-file-picker';
 
 @Injectable({
   providedIn: 'root'
@@ -34,15 +37,24 @@ export class ReceiptPhotoService {
   }
 
 
-  public async getReceiptPhotosFromGallery(): Promise<UploadFileReference[] | undefined> {
+  public async getReceiptPhotosFromGallery(): Promise<PickFilesResult | undefined> {
     try {
 
-      const { photos } = await Camera.pickImages({
+      const result = await FilePicker.pickFiles({
+        multiple: true,
+        types: ['image/png', 'application/pdf', 'image/jpg', 'image/jpeg'],
+        readData: true
+      })
+
+      return result
+
+     /* const { photos } = await Camera.pickImages({
         quality: 60,
         limit: 5
-      })
-      
-      return photos.map((photo, index) => this.buildFileObject(photo, index))
+      })*/
+
+
+      //return photos.map((photo, index) => this.buildFileObject(photo, index))
 
     } catch(error) {
       console.log("Error selecting Photos", error);
@@ -50,6 +62,14 @@ export class ReceiptPhotoService {
     }
   }
 
+  async buildGalleryFileObject(file: File, index: number) : Promise<UploadFileReference> {
+    const timestamp = Date.now();
+      const uploadFile : UploadFileReference = {
+        webPath: await file.blob?.text(),
+        filename: `receipt_${timestamp}_${index}.${file.mimeType}`,
+      }
+      return uploadFile;
+  }
 
   private buildFileObject(photo: Photo | GalleryPhoto, index: number) : UploadFileReference {
     const timestamp = Date.now();

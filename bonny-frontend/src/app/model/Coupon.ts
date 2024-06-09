@@ -9,7 +9,8 @@ export interface Coupon {
 }
 
 export interface TCoupon extends Coupon {
-    status: string | undefined 
+    status: string | undefined,
+    loading: boolean
 }
 
 export interface CouponStatus {

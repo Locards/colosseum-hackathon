@@ -25,7 +25,10 @@ export class ProfileService {
         where: {id: id},
         relations: {
           transactions: {
-            receipt: true
+            receipt: true,
+            questStatus: {
+              quest: true
+            }
           },
           couponStatuses: true
         }

@@ -18,6 +18,11 @@ export class OfferCardComponent  implements OnInit {
   ngOnInit() {}
 
   showOffer() {
+
+
+    window.open(this.offer.externalUrl, "_blank")
+    return
+
     this.modalCtrl.create({
       component: OfferDetailsComponent,
       componentProps: {offer: this.offer}

@@ -4,6 +4,7 @@ import { CouponService } from 'src/model/coupons/coupons.service';
 import { QuestService } from 'src/model/quest/quest.service';
 import { Marketplace } from './marketplace.entity';
 import { SurveyService } from 'src/model/survey/survey.service';
+import { Quest } from 'src/model/quest/quest.entity';
 
 @Controller('marketplace')
 export class MarketplaceController {
@@ -33,9 +34,15 @@ export class MarketplaceController {
 
     @Post("survey/answer")
     async answerSurveyForUser(@Body("uid") uid: string, @Body("answer") answer: SurveyAnswer) {
-         
-        if(answer) await this.questService.completeQuest(uid, answer.questId)
-        return await this.surveyService.submitAnswer(uid, answer)
+        const res = await this.questService.completeQuest(uid, answer.questId)
+        await this.surveyService.submitAnswer(uid, answer)
+        return res
+    }
+
+    @Post("quest/complete")
+    async completeSimpleQuest(@Body("uid") uid: string, @Body("quest") quest: Quest) {
+        const res = await this.questService.completeQuest(uid, quest.id)
+        return res
     }
 }
 
@@ -44,7 +51,8 @@ export interface SurveyAnswer {
     surveyId: number,
     answers: {
         questionId: number,
-        optionId: number
+        optionId?: number,
+        freeText?: string
     }[]
 }
 

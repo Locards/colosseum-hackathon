@@ -9,7 +9,7 @@ export interface Survey {
 export interface Question {
     id: number,
     title: string,
-    type: string,
+    type: "text" | "option",
     order: number,
     options?: QuestionOption[]
 }
@@ -28,5 +28,6 @@ export interface SurveyAnswer {
 
 export interface SurveyOptionAnswer {
     questionId: number,
-    optionId: number
+    optionId?: number,
+    freeText?: string
 }

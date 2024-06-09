@@ -1,11 +1,35 @@
 <ion-content [fullscreen]="true">
 
+  <ion-refresher slot="fixed" (ionRefresh)="getStats($event)">
+    <ion-refresher-content refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
 
-  <main>
-    <img src="assets/analysis.png">
-    <span>Coming soon</span>
+  <main *ngIf="stats">
+    <h1>Network Stats</h1>
+    <h3>
+      <span>Users</span>
+      <span>{{stats.totalUsers}}</span>
+    </h3>
+    <h3>
+      <span>Receipts</span>
+      <span>{{stats.totalReceipts}}</span>
+    </h3>
+    <h3>
+      <span>Quests</span>
+      <span>{{stats.totalQuests}}</span>
+    </h3>
+    <h3>
+      <span>Coupons</span>
+      <span>{{stats.totalCoupons}}</span>
+    </h3>
+    <h3>
+      <span>Total Earned</span>
+      <span>{{stats.totalEarend.toFixed(2)}} °B</span>
+    </h3>
 
+    <div class="footer">
+      <span>Version {{version}}</span>
+    </div>
   </main>
-
 
 </ion-content>

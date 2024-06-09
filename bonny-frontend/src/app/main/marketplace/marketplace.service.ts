@@ -24,21 +24,22 @@ export class MarketplaceService {
 
   constructor(
     private http: HttpClient,
-    private homeService: HomeService  
+    private homeService: HomeService,
   ) { 
     this.loadProfile()
   }
 
   private loadProfile() {
-    this.homeService.getProfile().subscribe((profile: Profile) => {
+    this.homeService.getProfile$().subscribe((profile: Profile) => {
       this.profile = profile
     })
   }
 
-  loadMarketplace(): void {
+  loadMarketplace(event?: any): void {
     this.http.get<Marketplace>(`${environment.backendUrl}/marketplace`, {params: {uid: this.profile.id}}).subscribe((marketplace: Marketplace) => 
       {
         this.updateMarketplaceObject(marketplace)
+        if(event) event.target.complete()
       }
     )
   }
@@ -59,7 +60,8 @@ export class MarketplaceService {
         marketplace.coupons.map((coupon: Coupon) => {
           return {
             ...coupon,
-            status: this.profile.couponStatuses.find(status => status.couponId == coupon.id)?.status
+            status: this.profile.couponStatuses.find(status => status.couponId == coupon.id)?.status,
+            loading: false
           }
         }), (coupon: TCoupon) => coupon.status, "asc"
       )
@@ -121,7 +123,7 @@ export class MarketplaceService {
       uid: this.profile.id,
       answer: answer
     }).pipe(
-      tap(() => {
+      tap((res: any) => {
         
         this.marketplaceSubject.next(
           {
@@ -134,6 +136,9 @@ export class MarketplaceService {
             )
           }
         )
+
+        this.homeService.addTokens(res.gainedPoints)
+
       })
     )
   }
@@ -164,6 +169,27 @@ export class MarketplaceService {
             )
           }
         )
+      })
+    )
+  }
+
+  completeQuest(quest: Quest) {
+    return this.http.post<any>(`${environment.backendUrl}/marketplace/quest/complete`, {uid: this.profile.id, quest: quest})
+    .pipe(
+      tap((res: any) => {
+        this.marketplaceSubject.next(
+          {
+            ...this.marketplaceSubject.value,
+            quests: this.marketplaceSubject.value.quests.filter(
+              (q: Quest) => {
+                return q.id != quest.id;
+              }
+            )
+          }
+        )
+
+        this.homeService.addTokens(res.gainedPoints)
+
       })
     )
   }
